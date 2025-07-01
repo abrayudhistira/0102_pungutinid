@@ -26,7 +26,12 @@ class ProfilePage extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 48,
                       backgroundColor: Colors.green[200],
-                      child: const Icon(Icons.person, size: 48, color: Colors.white),
+                      backgroundImage: (user.photo != null && user.photo?.isNotEmpty == true)
+                          ? NetworkImage(user.photo!)
+                          : null,
+                      child: (user.photo == null || user.photo?.isEmpty == true)
+                          ? const Icon(Icons.person, size: 48, color: Colors.white)
+                          : null,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -44,41 +49,58 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   const Text(
-                    "Email",
+                    "Username",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                   Text(user.username ?? "-"),
                   const SizedBox(height: 32),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.logout),
-                      label: const Text("Logout"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[400],
-                        foregroundColor: Colors.white,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.edit),
+                          label: const Text("Edit Profile"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[400],
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/editProfile');
+                          },
+                        ),
                       ),
-                      onPressed: () async {
-                        await authCtrl.logout();
-                        if (context.mounted) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Silahkan login lagi.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Tutup dialog
-                                    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-                                  },
-                                  child: const Text('OK'),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.logout),
+                          label: const Text("Logout"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red[400],
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: () async {
+                            await authCtrl.logout();
+                            if (context.mounted) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Silahkan login lagi.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
