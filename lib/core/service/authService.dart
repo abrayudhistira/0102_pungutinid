@@ -5,7 +5,7 @@ import 'package:pungutinid/core/model/userModel.dart';
 
 class AuthService {
   // Ganti dengan base URL backend-mu
-  static const _baseUrl = 'http://10.69.6.124:3000/auth';
+  static const _baseUrl = 'http://192.168.1.21:3001/auth';
   final _storage = const FlutterSecureStorage();
 
   // Keys untuk storage
