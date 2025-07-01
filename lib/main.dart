@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pungutinid/component/screen/splashscreen.dart';
+import 'package:pungutinid/core/controller/authController.dart';
+import 'package:pungutinid/core/service/authService.dart';
+import 'package:pungutinid/page/auth/login.dart';
 import 'package:pungutinid/page/dashboard/dashboard.dart';
+import 'package:pungutinid/page/profile/profile.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  final authService = AuthService();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthController(authService),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,6 +36,13 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Poppins',
       ),
       home: const Splashscreen(),
+      routes: {
+        '/buyerDashboard': (context) => DashboardScreen(),
+        '/providerDashboard': (context) => DashboardScreen(),
+        '/login': (context) => LoginPage(),
+        '/register': (context) => LoginPage(),
+        '/profile': (context) => ProfilePage(),
+      },
     );
   }
 }

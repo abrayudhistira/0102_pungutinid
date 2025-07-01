@@ -81,7 +81,7 @@ class Landingpage extends StatelessWidget {
                     child: ButtonWhite(
                       text: 'Masuk',
                       onPressed: () {
-                        print('Masuk button pressed');
+                        Navigator.pushNamed(context, '/login');
                       },
                     ),
                   ),
