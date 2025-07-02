@@ -4,6 +4,7 @@ import 'package:pungutinid/component/screen/splashscreen.dart';
 import 'package:pungutinid/core/controller/authController.dart';
 import 'package:pungutinid/core/service/authService.dart';
 import 'package:pungutinid/page/auth/login.dart';
+import 'package:pungutinid/page/auth/register.dart';
 import 'package:pungutinid/page/dashboard/dashboard.dart';
 import 'package:pungutinid/page/profile/editProfile.dart';
 import 'package:pungutinid/page/profile/profile.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         '/buyerDashboard': (context) => DashboardScreen(),
         '/providerDashboard': (context) => DashboardScreen(),
         '/login': (context) => LoginPage(),
-        '/register': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
         '/profile': (context) => ProfilePage(),
         '/editProfile': (context) => const EditProfilePage(),
       },
