@@ -15,6 +15,10 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _usernameController;
+  late TextEditingController _fullnameController;
+  late TextEditingController _emailController;
+  late TextEditingController _addressController;
+  late TextEditingController _phoneController;
   late TextEditingController _passwordController;
   File? _imageFile;
 
@@ -23,12 +27,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     final user = context.read<AuthController>().user;
     _usernameController = TextEditingController(text: user?.username ?? '');
+    _fullnameController = TextEditingController(text: user?.fullname ?? '');
+    _emailController = TextEditingController(text: user?.email ?? '');
+    _addressController = TextEditingController(text: user?.address ?? '');
+    _phoneController = TextEditingController(text: user?.phone ?? '');
     _passwordController = TextEditingController();
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
+    _fullnameController.dispose();
+    _emailController.dispose();
+    _addressController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -45,18 +57,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> _saveProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
+      final user = context.read<AuthController>().user;
       final username = _usernameController.text.trim();
+      final fullname = _fullnameController.text.trim();
+      final email = _emailController.text.trim();
+      final address = _addressController.text.trim();
+      final phone = _phoneController.text.trim();
       final password = _passwordController.text.trim();
       final image = _imageFile;
 
       final profileService = ProfileService();
       await profileService.updateProfile(
+        userId: user!.id,
         username: username,
+        fullname: fullname,
+        email: email,
+        address: address,
+        phone: phone,
         password: password.isNotEmpty ? password : null,
         photo: image,
       );
 
       if (context.mounted) {
+        await context.read<AuthController>().refreshUser();
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profile updated!')),
@@ -87,8 +110,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     backgroundColor: Colors.green[200],
                     backgroundImage: _imageFile != null
                         ? FileImage(_imageFile!)
-                        : null,
-                    child: _imageFile == null
+                        : (user?.photo != null && user!.photo!.isNotEmpty
+                            ? NetworkImage(user.photo!) as ImageProvider
+                            : null),
+                    child: _imageFile == null && (user?.photo == null || user!.photo!.isEmpty)
                         ? const Icon(Icons.camera_alt, size: 40, color: Colors.white)
                         : null,
                   ),
@@ -102,6 +127,50 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   border: OutlineInputBorder(),
                 ),
                 validator: (val) => val == null || val.isEmpty ? 'Username wajib diisi' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _fullnameController,
+                decoration: const InputDecoration(
+                  labelText: 'Nama Lengkap',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (val) => val == null || val.isEmpty ? 'Nama lengkap wajib diisi' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Email wajib diisi';
+                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(val)) return 'Format email tidak valid';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _addressController,
+                decoration: const InputDecoration(
+                  labelText: 'Alamat',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (val) => val == null || val.isEmpty ? 'Alamat wajib diisi' : null,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _phoneController,
+                decoration: const InputDecoration(
+                  labelText: 'No. Telepon',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'No. Telepon wajib diisi';
+                  if (!RegExp(r'^[0-9]{10,15}$').hasMatch(val)) return 'No. Telepon harus 10-15 digit angka';
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
               TextFormField(
