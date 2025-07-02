@@ -72,7 +72,7 @@ class Landingpage extends StatelessWidget {
                     child: ButtonGreen(
                       text: 'Daftar',
                       onPressed: () {
-                        print('Daftar button pressed');
+                        Navigator.pushNamed(context, '/register');
                       },
                     ),
                   ),
