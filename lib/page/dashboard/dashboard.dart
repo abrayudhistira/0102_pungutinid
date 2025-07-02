@@ -68,7 +68,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               radius: 16,
                               backgroundColor: Colors.white,
                               child: Text(
-                                user?.username.substring(0, 1).toUpperCase() ?? '?',
+                                (user?.username != null && user?.username?.isNotEmpty == true)
+                                    ? user!.username!.substring(0, 1).toUpperCase()
+                                    : '?',
                                 style: TextStyle(
                                   color: Colors.green[700],
                                   fontWeight: FontWeight.bold,
