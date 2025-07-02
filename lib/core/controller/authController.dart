@@ -40,6 +40,23 @@ class AuthController extends ChangeNotifier {
     }
   }
 
+  Future<bool> register(String username, String password, String fullname, String address, String phone, String email) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      await _service.register(username: username, password: password, fullname: fullname, address: address, phone: phone, email: email);
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   /// Logout dan update state
   Future<void> logout() async {
     await _service.logout();
@@ -53,6 +70,18 @@ class AuthController extends ChangeNotifier {
       return await _service.getProtectedResource();
     } catch (_) {
       return null;
+    }
+  }
+
+  /// Ambil ulang data user dari backend dan update state
+  Future<void> refreshUser() async {
+    try {
+      final u = await _service.getProfile(); // Pastikan getProfile ada di AuthService
+      _user = u;
+      notifyListeners();
+      print('[AuthController] User refreshed: ${_user?.username}');
+    } catch (e) {
+      print('[AuthController] Failed to refresh user: $e');
     }
   }
 }
