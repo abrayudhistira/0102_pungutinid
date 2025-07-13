@@ -63,6 +63,11 @@ class CitizenNavbar extends StatelessWidget {
         } else {
           onTap(index);
         }
+        if (label == 'Jual') {
+          Navigator.pushNamed(context, '/citizenTransaction');
+        } else {
+          onTap(index);
+        }
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

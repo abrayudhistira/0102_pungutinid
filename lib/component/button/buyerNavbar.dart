@@ -35,10 +35,10 @@ class BuyerNavbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildNavItem(context, Icons.home, 'Home', 0),
-          _buildNavItem(context, Icons.location_on_rounded, 'Location', 1),
-         // _buildNavItem(context, Icons.search, 'Search', 2),
+          _buildNavItem(context, Icons.location_on_rounded, 'Lokasi', 1),
+         _buildNavItem(context, Icons.addchart, 'Beli', 2),
           //_buildNavItem(context, Icons.report, 'Report',3),
-          _buildNavItem(context, Icons.person, 'Profile', 2),
+          _buildNavItem(context, Icons.person, 'Profile', 3),
         ],
       ),
     );
@@ -53,13 +53,13 @@ class BuyerNavbar extends StatelessWidget {
         } else {
           onTap(index);
         }
-        if (label == 'Location') {
+        if (label == 'Lokasi') {
           Navigator.pushNamed(context, '/locationGet');
         } else {
           onTap(index);
         }
-        if (label == 'Report') {
-          Navigator.pushNamed(context, '/wasteReport');
+        if (label == 'Beli') {
+          Navigator.pushNamed(context, '/buyerTransaction');
         } else {
           onTap(index);
         }
