@@ -21,6 +21,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController _phoneController;
   late TextEditingController _passwordController;
   File? _imageFile;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -45,9 +46,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
+  Future<void> _showImageSourceActionSheet() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => SafeArea(
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Ambil Foto'),
+              onTap: () {
+                Navigator.of(context).pop();
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Pilih dari Galeri'),
+              onTap: () {
+                Navigator.of(context).pop();
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picked = await _picker.pickImage(source: source, imageQuality: 80);
     if (picked != null) {
       setState(() {
         _imageFile = File(picked.path);
@@ -104,29 +132,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
             children: [
               Center(
                 child: GestureDetector(
-                  onTap: _pickImage,
+                  onTap: _showImageSourceActionSheet,
                   child: CircleAvatar(
                     radius: 48,
                     backgroundColor: Colors.green[200],
                     backgroundImage: _imageFile != null
                         ? FileImage(_imageFile!)
-                        : (user?.photo != null && user!.photo!.isNotEmpty
+                        : (user?.photo != null && user!.photo.isNotEmpty
                             ? NetworkImage(user.photo!) as ImageProvider
                             : null),
-                    child: _imageFile == null && (user?.photo == null || user!.photo!.isEmpty)
-                        ? const Icon(Icons.camera_alt, size: 40, color: Colors.white)
+                    child: _imageFile == null &&
+                            (user?.photo == null || user!.photo.isEmpty)
+                        ? const Icon(Icons.camera_alt,
+                            size: 40, color: Colors.white)
                         : null,
                   ),
                 ),
               ),
               const SizedBox(height: 24),
+
               TextFormField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
                   labelText: 'Username',
                   border: OutlineInputBorder(),
                 ),
-                validator: (val) => val == null || val.isEmpty ? 'Username wajib diisi' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Username wajib diisi' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -135,7 +167,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   labelText: 'Nama Lengkap',
                   border: OutlineInputBorder(),
                 ),
-                validator: (val) => val == null || val.isEmpty ? 'Nama lengkap wajib diisi' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Nama lengkap wajib diisi' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -146,7 +179,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
                 validator: (val) {
                   if (val == null || val.isEmpty) return 'Email wajib diisi';
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(val)) return 'Format email tidak valid';
+                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(val))
+                    return 'Format email tidak valid';
                   return null;
                 },
               ),
@@ -157,7 +191,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   labelText: 'Alamat',
                   border: OutlineInputBorder(),
                 ),
-                validator: (val) => val == null || val.isEmpty ? 'Alamat wajib diisi' : null,
+                validator: (val) =>
+                    val == null || val.isEmpty ? 'Alamat wajib diisi' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -166,11 +201,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   labelText: 'No. Telepon',
                   border: OutlineInputBorder(),
                 ),
-                validator: (val) {
-                  if (val == null || val.isEmpty) return 'No. Telepon wajib diisi';
-                  if (!RegExp(r'^[0-9]{10,15}$').hasMatch(val)) return 'No. Telepon harus 10-15 digit angka';
-                  return null;
-                },
+                keyboardType: TextInputType.phone,
+                // validator: (val) {
+                //   if (val == null || val.isEmpty)
+                //     return 'No. Telepon wajib diisi';
+                //   if (!RegExp(r'^[0-9]{10,15}\$').hasMatch(val))
+                //     return 'No. Telepon harus 10-15 digit angka';
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
