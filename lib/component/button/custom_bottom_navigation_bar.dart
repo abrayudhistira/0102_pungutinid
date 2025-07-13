@@ -63,6 +63,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
         } else {
           onTap(index);
         }
+        if (label == 'Laporan') {
+          Navigator.pushNamed(context, '/wasteReport');
+        } else {
+          onTap(index);
+        }
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
