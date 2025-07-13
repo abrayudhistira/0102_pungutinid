@@ -32,11 +32,21 @@ class _LoginPageState extends State<LoginPage> {
     // Navigasi jika sudah terautentikasi
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (authCtrl.user != null) {
-        final route = authCtrl.user!.role == 'Buyer'
-            ? '/buyerDashboard'
-            : '/providerDashboard';
+        final String route;
+        final String? role = authCtrl.user!.role;
+
+        if (role == 'buyer') {
+          route = '/buyerDashboard';
+        } else if (role == 'provider') {
+          route = '/providerDashboard';
+        } else if (role == 'citizen') {
+          route = '/citizenDashboard';
+        } else {
+          // Role tidak dikenali, arahkan ke halaman default atau login
+          route = '/login'; // atau halaman error/landing page
+        }
+
         Navigator.pushNamedAndRemoveUntil(context, route, (route) => false);
-        //Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false);
       }
     });
 
