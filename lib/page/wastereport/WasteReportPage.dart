@@ -7,6 +7,7 @@ import 'package:pungutinid/bloc/reportbloc/report_event.dart';
 import 'package:pungutinid/bloc/reportbloc/report_state.dart';
 import 'package:pungutinid/component/button/buyerNavbar.dart';
 import 'package:pungutinid/component/button/citizenNavbar.dart';
+import 'package:pungutinid/core/controller/authController.dart';
 import 'package:pungutinid/core/model/wasteReportModel.dart';
 import 'package:pungutinid/core/service/reportService.dart';
 
@@ -30,9 +31,29 @@ class _WasteReportViewState extends State<_WasteReportView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthController>().user;
+    final role = user?.role;
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pushNamedAndRemoveUntil(context, '/citizenDashboard', (route) => false);
+        String targetRoute;
+        switch (role) {
+          case 'buyer':
+            targetRoute = '/buyerDashboard';
+            break;
+          case 'provider':
+            targetRoute = '/providerDashboard';
+            break;
+          case 'citizen':
+            targetRoute = '/citizenDashboard';
+            break;
+          default:
+            targetRoute = '/login';
+        }
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          targetRoute,
+          (route) => false,
+        );
         return false;
       },
       child: Scaffold(
