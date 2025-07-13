@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:pungutinid/component/button/buyerNavbar.dart';
 import 'package:pungutinid/core/controller/authController.dart';
+import 'package:pungutinid/core/model/wasteSalesModel.dart';
+import 'package:pungutinid/core/service/transactionService.dart';
 
 class BuyerDashboardScreen extends StatefulWidget {
   @override
@@ -50,17 +52,17 @@ class _BuyerDashboardScreenState extends State<BuyerDashboardScreen> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.location_on, color: Colors.white, size: 16),
                             SizedBox(width: 4),
-                            Text(
-                              'Gunung, Kiaten[Buyer Dashboard]',
-                              style: TextStyle(color: Colors.white, fontSize: 14),
-                            ),
+                            Text('Pungutin.id',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            )),
                           ],
                         ),
                         Row(
                           children: [
-                            Icon(Icons.mail_outline, color: Colors.white),
                             SizedBox(width: 16),
                             Icon(Icons.notifications_outlined, color: Colors.white),
                             SizedBox(width: 16),
@@ -109,56 +111,7 @@ class _BuyerDashboardScreenState extends State<BuyerDashboardScreen> {
                 ),
               ),
 
-              // Balance Card
-              Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Penghasilan Cash',
-                              style:
-                                  TextStyle(color: Colors.grey[600], fontSize: 14)),
-                          SizedBox(height: 4),
-                          Text('Rp 200,000',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
-                          SizedBox(height: 8),
-                          Text('Periode: Mei 2024',
-                              style:
-                                  TextStyle(color: Colors.grey[500], fontSize: 12)),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        _buildIconBox(Icons.trending_up, Colors.green[100], Colors.green[700]),
-                        SizedBox(width: 8),
-                        _buildIconBox(Icons.account_balance_wallet, Colors.blue[100], Colors.blue[700]),
-                        SizedBox(width: 8),
-                        _buildIconBox(Icons.history, Colors.red[100], Colors.red[700]),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              SizedBox(height: 30), // reduced spacing
 
               // Menu Grid
               Container(
@@ -167,99 +120,137 @@ class _BuyerDashboardScreenState extends State<BuyerDashboardScreen> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 3,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15,
+                  childAspectRatio: 0.85, // Adjusted aspect ratio to provide more height
                   children: [
                     _buildMenuCard(
-                      icon: Icons.people,
-                      title: 'Pengguna',
-                      subtitle: 'Anggota',
+                      icon: Icons.location_on_rounded,
+                      title: 'Lokasi',
+                      subtitle: 'Lokasi Bank Sampah',
+                      color: Colors.green[700]!,
+                      onTap: () {
+                        Navigator.pushNamed(context, '/locationGet');
+                      },
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.add_chart_rounded,
+                      title: 'Beli',
+                      subtitle: 'Beli Sampah',
                       color: Colors.blue,
-                    ),
-                    _buildMenuCard(
-                      icon: Icons.group,
-                      title: 'Pengguna',
-                      subtitle: 'Pelanggan',
-                      color: Colors.blue,
-                    ),
-                    _buildMenuCard(
-                      icon: Icons.account_balance_wallet,
-                      title: 'Keuangan',
-                      subtitle: 'Pengeluaran',
-                      color: Colors.green,
-                    ),
-                    _buildMenuCard(
-                      icon: Icons.poll,
-                      title: 'Toko',
-                      subtitle: 'Analisis',
-                      color: Colors.orange,
-                    ),
-                    _buildMenuCard(
-                      icon: Icons.receipt,
-                      title: 'List Sampah',
-                      subtitle: 'Pesanan',
-                      color: Colors.blue,
+                      onTap: () {
+                        Navigator.pushNamed(context, '/buyerTransaction');
+                      },
                     ),
                   ],
                 ),
               ),
+              
+              SizedBox(height: 20), // spacing before sales section
+              
+              FutureBuilder(
+                future: TransactionService().fetchAvailableWaste(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Gagal memuat data: ${snapshot.error}"));
+                  } else if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
+                    return const Center(child: Text("Belum ada penjualan tersedia."));
+                  }
 
-              // Promotional Banner
-              Container(
-                margin: EdgeInsets.all(20),
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.orange[400]!, Colors.orange[600]!],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.card_giftcard, color: Colors.white, size: 24),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('40.000 cash top jadi Gold Member',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500)),
-                          Text('Dapatkan 3X',
-                              style: TextStyle(color: Colors.white70, fontSize: 12)),
-                        ],
-                      ),
-                    ),
-                    Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
-                  ],
-                ),
-              ),
+                  final sales = (snapshot.data as List<WasteSale>)
+                      .where((sale) => sale.status == 'not_yet')
+                      .take(4)
+                      .toList();
 
-              // Hot News Section
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text('Hot News',
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Text(
+                          "Penjualan Tersedia", 
                           style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: sales.length,
+                          itemBuilder: (context, index) {
+                            final sale = sales[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: index < sales.length - 1
+                                    ? Border(bottom: BorderSide(color: Colors.grey[200]!))
+                                    : null,
+                              ),
+                              child: ListTile(
+                                leading: Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[100],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(Icons.recycling, color: Colors.green[700], size: 20),
+                                ),
+                                title: Text(
+                                  "${sale.seller.fullname} - ${sale.weightKg} kg",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  "Rp ${sale.totalPrice}",
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                trailing: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[100],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    sale.status == "not_yet" ? "Tersedia" : sale.status,
+                                    style: TextStyle(
+                                      color: Colors.green[700],
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
-
               SizedBox(height: 100), // spacing bottom
             ],
           ),
@@ -291,52 +282,61 @@ class _BuyerDashboardScreenState extends State<BuyerDashboardScreen> {
     required IconData icon,
     required String title,
     required String subtitle,
-    required Color color,
+    required Color color, 
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(12), // reduced padding
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 2),
             ),
-            child: Icon(icon, color: color, size: 24),
-          ),
-          SizedBox(height: 8),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(10), // reduced padding
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: color, size: 20), // reduced icon size
             ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey[600],
+            SizedBox(height: 6), // reduced spacing
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 11, // reduced font size
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            SizedBox(height: 2), // reduced spacing
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 9, // reduced font size
+                color: Colors.grey[600],
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }
