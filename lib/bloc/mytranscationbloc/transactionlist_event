@@ -1,0 +1,9 @@
+// lib/bloc/transactionlistbloc/transactionlist_event.dart
+import 'package:equatable/equatable.dart';
+
+abstract class TransactionListEvent extends Equatable {
+  const TransactionListEvent();
+  @override List<Object?> get props => [];
+}
+
+class LoadMyTransactions extends TransactionListEvent {}
