@@ -429,7 +429,7 @@ class _PurchaseDialogState extends State<PurchaseDialog> {
                           child: Image.file(
                             selectedImage!,
                             height: 120,
-                            width: double.infinity,
+                            width: MediaQuery.of(context).size.width * 0.8,
                             fit: BoxFit.cover,
                           ),
                         ),
