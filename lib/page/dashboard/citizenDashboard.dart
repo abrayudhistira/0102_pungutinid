@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:pungutinid/component/button/buyerNavbar.dart';
+import 'package:pungutinid/component/button/citizenNavbar.dart';
 import 'package:pungutinid/core/controller/authController.dart';
-import 'package:pungutinid/component/button/custom_bottom_navigation_bar.dart';
 
-class DashboardScreen extends StatefulWidget {
+class CitizenDashboardScreen extends StatefulWidget {
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  _CitizenDashboardScreenState createState() => _CitizenDashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _CitizenDashboardScreenState extends State<CitizenDashboardScreen> {
   int _currentIndex = 0;
 
   @override
@@ -58,8 +59,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         Row(
                           children: [
-                            Icon(Icons.mail_outline, color: Colors.white),
-                            SizedBox(width: 16),
                             Icon(Icons.notifications_outlined, color: Colors.white),
                             SizedBox(width: 16),
                             CircleAvatar(
@@ -169,22 +168,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisSpacing: 20,
                   children: [
                     _buildMenuCard(
-                      icon: Icons.people,
+                      icon: Icons.list_alt_rounded,
                       title: 'Langganan',
-                      subtitle: 'Kelola Paket Langganan',
-                      color: Colors.blue,
+                      subtitle: 'Layanan Sampah',
+                      color: Colors.green,
                       onTap: () {
-                        Navigator.pushNamed(context, '/subscribe');
+                        Navigator.pushNamed(context, '/mySubscription');
                       },
                     ),
                     _buildMenuCard(
-                      icon: Icons.group,
-                      title: 'Pengguna',
-                      subtitle: 'Kelola Langganan Pengguna',
+                      icon: Icons.info_outline_rounded,
+                      title: 'Panduan',
+                      subtitle: 'Guide Pengelolaan Sampah',
                       color: Colors.blue,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/providerSubscription');
-                      },
                     ),
                   ],
                 ),
@@ -194,7 +190,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: CitizenNavbar(
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -220,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required IconData icon,
     required String title,
     required String subtitle,
-    required Color color,
+    required Color color, 
     VoidCallback? onTap,
   }) {
     return GestureDetector(

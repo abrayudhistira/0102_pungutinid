@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:pungutinid/component/button/buyerNavbar.dart';
 import 'package:pungutinid/core/controller/authController.dart';
-import 'package:pungutinid/component/button/custom_bottom_navigation_bar.dart';
 
-class DashboardScreen extends StatefulWidget {
+class BuyerDashboardScreen extends StatefulWidget {
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  _BuyerDashboardScreenState createState() => _BuyerDashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _BuyerDashboardScreenState extends State<BuyerDashboardScreen> {
   int _currentIndex = 0;
 
   @override
@@ -50,9 +50,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         Row(
                           children: [
+                            Icon(Icons.location_on, color: Colors.white, size: 16),
+                            SizedBox(width: 4),
                             Text(
-                              'Pungutin.id',
-                              style: TextStyle(color: Colors.white, fontSize: 18),
+                              'Gunung, Kiaten[Buyer Dashboard]',
+                              style: TextStyle(color: Colors.white, fontSize: 14),
                             ),
                           ],
                         ),
@@ -170,31 +172,100 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     _buildMenuCard(
                       icon: Icons.people,
-                      title: 'Langganan',
-                      subtitle: 'Kelola Paket Langganan',
+                      title: 'Pengguna',
+                      subtitle: 'Anggota',
                       color: Colors.blue,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/subscribe');
-                      },
                     ),
                     _buildMenuCard(
                       icon: Icons.group,
                       title: 'Pengguna',
-                      subtitle: 'Kelola Langganan Pengguna',
+                      subtitle: 'Pelanggan',
                       color: Colors.blue,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/providerSubscription');
-                      },
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.account_balance_wallet,
+                      title: 'Keuangan',
+                      subtitle: 'Pengeluaran',
+                      color: Colors.green,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.poll,
+                      title: 'Toko',
+                      subtitle: 'Analisis',
+                      color: Colors.orange,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.receipt,
+                      title: 'List Sampah',
+                      subtitle: 'Pesanan',
+                      color: Colors.blue,
                     ),
                   ],
                 ),
               ),
+
+              // Promotional Banner
+              Container(
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.orange[400]!, Colors.orange[600]!],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.card_giftcard, color: Colors.white, size: 24),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('40.000 cash top jadi Gold Member',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500)),
+                          Text('Dapatkan 3X',
+                              style: TextStyle(color: Colors.white70, fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                  ],
+                ),
+              ),
+
+              // Hot News Section
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text('Hot News',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              ),
+
               SizedBox(height: 100), // spacing bottom
             ],
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: BuyerNavbar(
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -221,55 +292,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String title,
     required String subtitle,
     required Color color,
-    VoidCallback? onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: Offset(0, 2),
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
             ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, color: color, size: 24),
+            child: Icon(icon, color: color, size: 24),
+          ),
+          SizedBox(height: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
             ),
-            SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.center,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            subtitle,
+            style: TextStyle(
+              fontSize: 10,
+              color: Colors.grey[600],
             ),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey[600],
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
