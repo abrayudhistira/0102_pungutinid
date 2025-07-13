@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 
-class CustomBottomNavigationBar extends StatelessWidget {
+class BuyerNavbar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
-  const CustomBottomNavigationBar({
+  const BuyerNavbar({
     Key? key,
     required this.currentIndex,
     required this.onTap,
@@ -35,10 +35,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildNavItem(context, Icons.home, 'Home', 0),
-          _buildNavItem(context, Icons.location_on_rounded, 'Lokasi', 1),
-          _buildNavItem(context, Icons.check_circle_outline_rounded, 'Langganan', 2),
-          _buildNavItem(context, Icons.report_off_rounded, 'Laporan',3),
-          _buildNavItem(context, Icons.person, 'Profile', 4),
+          _buildNavItem(context, Icons.location_on_rounded, 'Location', 1),
+         // _buildNavItem(context, Icons.search, 'Search', 2),
+          //_buildNavItem(context, Icons.report, 'Report',3),
+          _buildNavItem(context, Icons.person, 'Profile', 2),
         ],
       ),
     );
@@ -53,13 +53,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
         } else {
           onTap(index);
         }
-        if (label == 'Lokasi') {
-          Navigator.pushNamed(context, '/locationCreate');
+        if (label == 'Location') {
+          Navigator.pushNamed(context, '/locationGet');
         } else {
           onTap(index);
         }
-        if (label == 'Langganan') {
-          Navigator.pushNamed(context, '/providerSubscription');
+        if (label == 'Report') {
+          Navigator.pushNamed(context, '/wasteReport');
         } else {
           onTap(index);
         }
