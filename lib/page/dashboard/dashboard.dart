@@ -52,7 +52,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           children: [
                             Text(
                               'Pungutin.id',
-                              style: TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                color: Colors.white, 
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -130,27 +134,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Penghasilan Cash',
-                              style:
-                                  TextStyle(color: Colors.grey[600], fontSize: 14)),
-                          SizedBox(height: 4),
+                              style: TextStyle(
+                                color: Colors.grey[600], 
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              )),
+                          SizedBox(height: 8),
                           Text('Rp 200,000',
                               style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
                           SizedBox(height: 8),
-                          Text('Periode: Mei 2024',
-                              style:
-                                  TextStyle(color: Colors.grey[500], fontSize: 12)),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Colors.green[100],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text('Periode: Mei 2024',
+                                style: TextStyle(
+                                  color: Colors.green[700], 
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                )),
+                          ),
                         ],
                       ),
                     ),
-                    Row(
+                    Column(
                       children: [
-                        _buildIconBox(Icons.trending_up, Colors.green[100], Colors.green[700]),
-                        SizedBox(width: 8),
-                        _buildIconBox(Icons.account_balance_wallet, Colors.blue[100], Colors.blue[700]),
-                        SizedBox(width: 8),
+                        Row(
+                          children: [
+                            _buildIconBox(Icons.trending_up, Colors.green[100], Colors.green[700]),
+                            SizedBox(width: 8),
+                            _buildIconBox(Icons.account_balance_wallet, Colors.blue[100], Colors.blue[700]),
+                          ],
+                        ),
+                        SizedBox(height: 8),
                         _buildIconBox(Icons.history, Colors.red[100], Colors.red[700]),
                       ],
                     ),
@@ -165,8 +186,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 3,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 15,
+                  crossAxisSpacing: 15,
+                  childAspectRatio: 0.85, // Added to provide more height
                   children: [
                     _buildMenuCard(
                       icon: Icons.people,
@@ -207,12 +229,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildIconBox(IconData icon, Color? bgColor, Color? iconColor) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Icon(icon, color: iconColor),
+      child: Icon(icon, color: iconColor, size: 20),
     );
   }
 
@@ -226,7 +248,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(12), // reduced padding
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -243,30 +265,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.all(12),
+              padding: EdgeInsets.all(10), // reduced padding
               decoration: BoxDecoration(
                 color: color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, color: color, size: 24),
+              child: Icon(icon, color: color, size: 20), // reduced icon size
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 6), // reduced spacing
             Text(
               title,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11, // reduced font size
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
               ),
               textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
+            SizedBox(height: 2), // reduced spacing
             Text(
               subtitle,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 9, // reduced font size
                 color: Colors.grey[600],
               ),
               textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
