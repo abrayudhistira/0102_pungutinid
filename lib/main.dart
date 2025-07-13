@@ -16,6 +16,7 @@ import 'package:pungutinid/page/dashboard/citizenDashboard.dart';
 import 'package:pungutinid/page/dashboard/dashboard.dart';
 import 'package:pungutinid/page/location/LocationPage.dart' as provider_location;
 import 'package:pungutinid/page/location/BuyerLocationPage.dart' as buyer_location;
+import 'package:pungutinid/page/panduan/panduanJenisSampahPage.dart';
 import 'package:pungutinid/page/profile/editProfile.dart';
 import 'package:pungutinid/page/profile/profile.dart';
 import 'package:pungutinid/page/subscription/AddSubscriptionPage.dart';
@@ -105,6 +106,7 @@ class MyApp extends StatelessWidget {
         '/citizenTransaction': (context) => CreateTransactionPage(),
         '/myTransaction': (context) => MyTransactionsPage(),
         '/buyerTransaction': (context) => WasteSalesPage(),
+        '/panduanJenisSampah': (context) => PanduanJenisSampahPage(),
       },
       navigatorObservers: [LoggingNavigatorObserver()],
     );

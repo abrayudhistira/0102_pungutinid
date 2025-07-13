@@ -275,6 +275,7 @@ class _CitizenDashboardScreenState extends State<CitizenDashboardScreen> {
                       title: 'Panduan',
                       subtitle: 'Guide Pengelolaan',
                       color: Colors.blue,
+                      onTap: () => Navigator.pushNamed(context, '/panduanJenisSampah'),
                     ),
                     _buildMenuCard(
                       icon: Icons.point_of_sale_rounded,
