@@ -22,6 +22,9 @@ import 'package:pungutinid/page/subscription/AddSubscriptionPage.dart';
 import 'package:pungutinid/page/subscription/ProviderSubscriptionPage.dart';
 import 'package:pungutinid/page/subscription/SubscriptionWastePage.dart';
 import 'package:pungutinid/page/subscription/UserSubscriptionPage.dart';
+import 'package:pungutinid/page/transaction/CreateTransactionPage.dart';
+import 'package:pungutinid/page/transaction/MyTransactionPage.dart';
+import 'package:pungutinid/page/transaction/WasteSalesPage.dart';
 import 'package:pungutinid/page/wastereport/PostReportPage.dart';
 import 'package:pungutinid/page/wastereport/WasteReportPage.dart';
 
@@ -99,6 +102,9 @@ class MyApp extends StatelessWidget {
         '/mySubscription': (context) => const UserSubscriptionPage(),
         '/addSubscription': (context) => const AddSubscriptionPage(),
         '/providerSubscription': (context) => const ProviderSubscriptionPage(),
+        '/citizenTransaction': (context) => CreateTransactionPage(),
+        '/myTransaction': (context) => MyTransactionsPage(),
+        '/buyerTransaction': (context) => WasteSalesPage(),
       },
       navigatorObservers: [LoggingNavigatorObserver()],
     );
