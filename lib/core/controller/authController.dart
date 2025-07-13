@@ -40,16 +40,33 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<bool> register(String username, String password, String fullname, String address, String phone, String email) async {
+  Future<bool> register({
+    required String username,
+    required String password,
+    required String fullname,
+    required String address,
+    required String phone,
+    required String email,
+    required String role,
+  }) async {
     _isLoading = true;
-    _error = null;
+    _error     = null;
     notifyListeners();
 
     try {
-      await _service.register(username: username, password: password, fullname: fullname, address: address, phone: phone, email: email);
+      await _service.register(
+        username: username,
+        password: password,
+        fullname: fullname,
+        address: address,
+        phone: phone,
+        email: email,
+        role: role,
+      );
       return true;
     } catch (e) {
       _error = e.toString();
+      print('[AuthController] Register failed: $_error');
       return false;
     } finally {
       _isLoading = false;
