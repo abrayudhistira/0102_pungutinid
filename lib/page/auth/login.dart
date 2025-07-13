@@ -80,11 +80,11 @@ class _LoginPageState extends State<LoginPage> {
 
               // Email Field
               const Text(
-                'Nomor telepon atau email',
+                'Username',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.grey),
               ),
               const SizedBox(height: 8),
-              _buildInputField(_emailController, 'Masukkan email atau nomor telepon'),
+              _buildInputField(_emailController, 'Masukkan Username'),
 
               const SizedBox(height: 20),
 
